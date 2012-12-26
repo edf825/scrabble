@@ -23,7 +23,7 @@ function handleRequest(req, res) {
         game.handleDisplayBoard(req, res);
         break;
       case 'static':
-        serveStatic(req, res);
+        handleStatic(req, res);
         break;
       default:
         console.log('Unknown path ' + path + ' requested');
@@ -33,7 +33,7 @@ function handleRequest(req, res) {
   }
 }
 
-function serveStatic(req, res) {
+function handleStatic(req, res) {
   console.log('static file ' + req.url + ' requested');
 
   var url = req.url.substring(7);
