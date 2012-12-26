@@ -8,9 +8,15 @@ function handleRequest(req, res)
   console.log('Requested URL: ' + req.url);
   if (req.url == '/') {
     frontpage.handleRequest(req, res);
-  } else if (req.url == '/newboard') {
-    game.handleCreateBoard(req, res);
+  } else if (req.url == '/newgame') {
+    game.handleCreateGame(req, res);
   } else {
+    var urlBits = req.url.split('/');
+    console.log(urlBits[1]);
+
+    if (urlBits[1] == 'board') {
+      game.handleDisplayBoard(req, res);
+    }
   }
 }
 

@@ -1,15 +1,17 @@
-var boards = [];
-var lastBoardId = 0;
+var games = [];
+var lastGameId = 0;
 
 function init() {
 }
 
-function handleCreateBoard(req, res) {
-  var boardId = ++lastBoardId;
+function handleCreateGame(req, res) {
+  var gameId = ++lastGameId;
 
   // Board init stuff
 
-  res.writeHead(302, { 'Location' : '/board/' + boardId });
+  var game = games[gameId] = {};
+
+  res.writeHead(302, { 'Location' : '/board/' + gameId });
   res.end();
 }
 
@@ -19,4 +21,5 @@ function handleDisplayBoard(req, res) {
 function handleDisplayTiles(req, res) {
 }
 
-exports.handleCreateBoard = handleCreateBoard;
+exports.handleCreateGame = handleCreateGame;
+exports.handleDisplayBoard = handleDisplayBoard;
