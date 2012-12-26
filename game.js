@@ -18,3 +18,5 @@ function handleDisplayBoard(req, res) {
 
 function handleDisplayTiles(req, res) {
 }
+
+exports.handleCreateBoard = handleCreateBoard;
