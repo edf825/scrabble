@@ -1,22 +1,29 @@
 var games = [];
 var lastGameId = 0;
 
+var url = require('url');
+
 function init() {
 }
 
 function handleCreateGame(req, res) {
+  console.log('Entered handleCreateGame');
+
+  parsedUrl = url.parse(req.url, true /* parseQueryString */);
+  var numPlayers = parsedUrl.query && parsedUrl.query['players'] ? parsedUrl.query['players'] : 2;
+
   var gameId = ++lastGameId;
-
-  // Board init stuff
-
   var game = games[gameId] = {};
 
   game.board = [];
   for (var i = 0; i < 15; i++) {
-    game.board[i] = [];
-    for (var j = 0; j < 15; j++) {
-      game.board[i][j] = ' ';
-    }
+    game.board.push([' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']);
+  }
+
+  game.numPlayers = numPlayers;
+  game.scores = [];
+  for (var i = 0; i < numPlayers; i++) {
+    game.scores.push([0]);
   }
 
   res.writeHead(302, { 'Location' : '/board/' + gameId });
