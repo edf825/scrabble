@@ -3,28 +3,54 @@ var lastGameId = 0;
 
 var url = require('url');
 
+const TILES_PER_RACK = 7;
+const LETTERS = 'AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ';
+
 function init() {
+}
+
+function Game(numPlayers) {
+  this.board = [];
+  for (var i = 0; i < 15; i++) {
+    this.board.push([' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']);
+  }
+
+  this.numPlayers = numPlayers;
+  this.players = [];
+
+  this.tiles = LETTERS;
+
+  for (var i = 0; i < numPlayers; i++) {
+    this.players.push(new Player(this));
+  }
+}
+
+Game.prototype.requestTiles = function(numTiles) {
+  var ret = this.tiles.substring(0, numTiles);
+  this.tiles = this.tiles.substring(ret.length);
+  console.log('Added ' + ret + ' to rack');
+  return ret;
+}
+
+function Player(game) {
+  this.game = game;
+  this.score = [0];
+  this.rack = '';
+  this.rerack = function() {
+    this.rack += this.game.requestTiles(TILES_PER_RACK - this.rack.length);
+  };
+  this.rerack();
 }
 
 function handleCreateGame(req, res) {
   console.log('Entered handleCreateGame');
 
   parsedUrl = url.parse(req.url, true /* parseQueryString */);
-  var numPlayers = parsedUrl.query && parsedUrl.query['players'] ? parsedUrl.query['players'] : 2;
+  var numPlayers = parsedUrl.query && parsedUrl.query['players'] ?
+                    parseInt(parsedUrl.query['players']) : 2;
 
-  var gameId = ++lastGameId;
-  var game = games[gameId] = {};
-
-  game.board = [];
-  for (var i = 0; i < 15; i++) {
-    game.board.push([' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']);
-  }
-
-  game.numPlayers = numPlayers;
-  game.scores = [];
-  for (var i = 0; i < numPlayers; i++) {
-    game.scores.push([0]);
-  }
+  gameId = ++lastGameId;
+  games[gameId] = new Game(numPlayers);
 
   res.writeHead(302, { 'Location' : '/board/' + gameId });
   res.end();

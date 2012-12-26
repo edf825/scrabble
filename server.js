@@ -9,7 +9,7 @@ function handleRequest(req, res)
 {
   console.log('Requested URL: ' + req.url);
   var path = url.parse(req.url).pathname;
-  console.log('Requested path: ' + path.url);
+  console.log('Requested path: ' + path);
 
   if (path == '/') {
     frontpage.handleRequest(req, res);
