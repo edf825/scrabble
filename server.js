@@ -1,13 +1,16 @@
 var http = require('http');
 
+var frontpage = require('./frontpage.js');
+var game = require('./game.js');
+
 function handleRequest(req, res)
 {
   console.log('Requested URL: ' + req.url);
   if (req.url == '/') {
-    require('./frontpage.js').handleRequest(req, res);
+    frontpage.handleRequest(req, res);
+  } else if (req.url == '/newboard') {
+    game.handleCreateBoard(req, res);
   } else {
-    res.writeHead(200, { 'Content-Type' : 'text/html' });
-    res.end('OK!');
   }
 }
 
