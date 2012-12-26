@@ -3,15 +3,20 @@ var http = require('http');
 var frontpage = require('./frontpage.js');
 var game = require('./game.js');
 
+var url = require('url');
+
 function handleRequest(req, res)
 {
   console.log('Requested URL: ' + req.url);
-  if (req.url == '/') {
+  var path = url.parse(req.url).pathname;
+  console.log('Requested path: ' + path.url);
+
+  if (path == '/') {
     frontpage.handleRequest(req, res);
-  } else if (req.url == '/newgame') {
+  } else if (path == '/newgame') {
     game.handleCreateGame(req, res);
   } else {
-    var urlBits = req.url.split('/');
+    var urlBits = path.split('/');
     console.log(urlBits[1]);
 
     if (urlBits[1] == 'board') {
