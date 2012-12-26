@@ -26,7 +26,7 @@ function handleCreateGame(req, res) {
 function handleDisplayBoard(req, res) {
 }
 
-function handleDisplayTiles(req, res) {
+function handleDisplayRack(req, res) {
 }
 
 exports.handleCreateGame = handleCreateGame;
