@@ -25,6 +25,9 @@ function handleRequest(req, res) {
       case 'static':
         handleStatic(req, res);
         break;
+      case 'rack':
+        game.handleDisplayRack(req, res);
+        break;
       default:
         console.log('Unknown path ' + path + ' requested');
         serve404(req, res);
