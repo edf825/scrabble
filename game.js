@@ -89,6 +89,7 @@ function handleDisplayBoard(req, res) {
     game.board[0][13] = "B";
     game.board[4][6] = "C";
     
+    res.write("<a href=\"/rack/" + gameID + "/0\">Player 0s Rack</a><br>");
     res.write("<table id='board'>");
     for (var i = 0; i < 15; i++) {
         res.write("<tr>");
@@ -104,7 +105,63 @@ function handleDisplayBoard(req, res) {
 }
 
 function handleDisplayRack(req, res) {
+  console.log('displaying rack…');
+  
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  
+  res.write("<style type='text/css'>" +
+  "div#board{background-color:#007FFF;" +
+  "min-height: 10px;" +
+  "padding: 5px;}" + 
+  "div#rack{background-color:#FFFDDD;" +
+  "padding: 5px;}" + 
+  "div.tile{background-color:#FBFFFF;" + 
+  "margin: 5px;" +
+  "width: 50px;" +
+  "display: inline;}" +
+  "</style>");
+  
+  res.write("<script type='text/javascript'>" +
+  "function switchArea() {" +
+    "if (this.parentNode.id == 'rack') {;" +
+      "window.document.getElementById(\'board\').appendChild(this);" +
+    "}" +
+    "else if (this.parentNode.id == 'board') {;" +
+      "window.document.getElementById(\'rack\').appendChild(this);" +
+    "}" +  
+  "}" +
+  "</script>");
+  
+  var urlBits = req.url.split('/');
+  
+  var gameID = parseInt(urlBits[2]);
+  var playerID = parseInt(urlBits[3]);
+  
+  res.write("<div id=\"board\"></div>");
+  
+
+  //onclick=\"javascript:alert(window.document);\"
+  var playerRack = games[gameID].players[playerID].rack
+  res.write("<div id=\"rack\">");
+  for (var i = 0; i < 7; i++) {
+    res.write("<div class=\"tile\">" + playerRack[i] + "</div>");
+  }
+  res.write("</div>");
+  
+  res.write("<script type='text/javascript'>" + 
+  "var tiles = document.getElementsByClassName('tile');" +
+  "for (var i = 0; i < tiles.length; i++) {" +
+    "tiles[i].addEventListener('click', switchArea);" +
+  "}" +
+  /*"for (tile in document.getElementsByClassName('tile')) {" + 
+  "document.write(tile); " + 
+  //"tile.addEventListener('click', switchArea); " +
+  "}" + */
+  "</script>");
+  
+  res.end();
 }
 
 exports.handleCreateGame = handleCreateGame;
 exports.handleDisplayBoard = handleDisplayBoard;
+exports.handleDisplayRack = handleDisplayRack;
