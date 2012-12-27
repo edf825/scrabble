@@ -108,29 +108,11 @@ function handleDisplayRack(req, res) {
   console.log('displaying rack…');
   
   res.writeHead(200, {'Content-Type': 'text/html'});
+  res.write("<body>");
   
-  res.write("<style type='text/css'>" +
-  "div#board{background-color:#007FFF;" +
-  "min-height: 10px;" +
-  "padding: 5px;}" + 
-  "div#rack{background-color:#FFFDDD;" +
-  "padding: 5px;}" + 
-  "div.tile{background-color:#FBFFFF;" + 
-  "margin: 5px;" +
-  "width: 50px;" +
-  "display: inline;}" +
-  "</style>");
+  res.write("<link rel='stylesheet' type='text/css' href='/static/style.css'>");
   
-  res.write("<script type='text/javascript'>" +
-  "function switchArea() {" +
-    "if (this.parentNode.id == 'rack') {;" +
-      "window.document.getElementById(\'board\').appendChild(this);" +
-    "}" +
-    "else if (this.parentNode.id == 'board') {;" +
-      "window.document.getElementById(\'rack\').appendChild(this);" +
-    "}" +  
-  "}" +
-  "</script>");
+  res.write("<script type='text/javascript' src='/static/rack.js'></script>");
   
   var urlBits = req.url.split('/');
   
@@ -139,8 +121,6 @@ function handleDisplayRack(req, res) {
   
   res.write("<div id=\"board\"></div>");
   
-
-  //onclick=\"javascript:alert(window.document);\"
   var playerRack = games[gameID].players[playerID].rack
   res.write("<div id=\"rack\">");
   for (var i = 0; i < 7; i++) {
@@ -148,17 +128,7 @@ function handleDisplayRack(req, res) {
   }
   res.write("</div>");
   
-  res.write("<script type='text/javascript'>" + 
-  "var tiles = document.getElementsByClassName('tile');" +
-  "for (var i = 0; i < tiles.length; i++) {" +
-    "tiles[i].addEventListener('click', switchArea);" +
-  "}" +
-  /*"for (tile in document.getElementsByClassName('tile')) {" + 
-  "document.write(tile); " + 
-  //"tile.addEventListener('click', switchArea); " +
-  "}" + */
-  "</script>");
-  
+  res.write("<body>");
   res.end();
 }
 
